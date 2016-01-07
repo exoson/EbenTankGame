@@ -1,20 +1,35 @@
 package Graphics;
 
-import Main.EEngine;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import static org.lwjgl.opengl.GL11.*;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
+import Main.Matrix4f;
+import Main.Vector2f;
+import Main.Vector3f;
+import Main.Vector4f;
 
 public class Sprite 
 {
-    private static final Texture defText = loadtexture("lol");
+    private static float[] sqrVertices = new float[]{
+        -0.5f,-0.5f,0,
+        +0.5f,-0.5f,0,
+        -0.5f,+0.5f,0,
+        +0.5f,+0.5f,0
+    };
+    private static float[] sqrTextVertices = new float[] {
+        0,0,
+        1,0,
+        0,1,
+        1,1
+    };
+    private static byte[] sqrIndices = new byte[]{
+        0,2,1,
+        1,2,3
+    };
+    
+    private static Texture defText;
     private float sx;
     private float sy;
-    private final Texture text;
+    private Shader shader;
+    private VertexArray VAO;
+    private Texture text;
     
     /**
      * Initializes the class with the chosen texture.
@@ -24,12 +39,10 @@ public class Sprite
      */
     public Sprite(float sx, float sy,String texture)
     {
-        if(texture == null)
-        {
-            text = loadtexture("lol");
-        }else{
-            text = loadtexture(texture);
-        }
+        Matrix4f scale = Matrix4f.scale(new Vector3f(sx,sy,1));
+        text = new Texture(texture);
+        shader = Shader.defShader;
+        VAO = new VertexArray(scale.apply(sqrVertices), sqrIndices, sqrTextVertices);
         this.sx = sx;
         this.sy = sy;
     }
@@ -40,49 +53,42 @@ public class Sprite
      */
     public Sprite(float sx, float sy)
     {
-        this.sx = sx;
-        this.sy = sy;
-        text = loadtexture("lol");
+        this(sx,sy,"lol");
     }
     /**
      * Renders the sprite
+     * @param pos position to render the texture
      */
-    public void render()
+    public void render(Vector3f pos)
     {
-        text.bind();
-        glColor3f(1,1,1);
-        
-        glBegin(GL_QUADS);
-        {
-            glTexCoord2f(0,0); glVertex2f(-sx/2,-sy/2);
-            glTexCoord2f(1,0); glVertex2f(sx/2,-sy/2);
-            glTexCoord2f(1,1); glVertex2f(sx/2,sy/2);
-            glTexCoord2f(0,1); glVertex2f(-sx/2,sy/2);
-        }
-        glEnd();
-        
+        render(pos,0,1,1,1,1);
+    }
+    /**
+     * Renders the sprite
+     * @param pos position to render the texture
+     */
+    public void render(Vector2f pos)
+    {
+        render(new Vector3f(pos));
     }
     /**
      * Renders the sprite with specified color
+     * @param pos position to render the texture
+     * @param rot amount to rotate the texture
      * @param r red value of the color
      * @param g green value of the color
      * @param b blue value of the color
      * @param a alpha value of the color
      */
-    public void render(float r, float g, float b, float a)
+    public void render(Vector3f pos,float rot, float r, float g, float b, float a)
     {
         text.bind();
-        glColor4f(r,g,b,a);
-        
-        glBegin(GL_QUADS);
-        {
-            glTexCoord2f(0,0); glVertex2f(-sx/2,-sy/2);
-            glTexCoord2f(1,0); glVertex2f(sx/2,-sy/2);
-            glTexCoord2f(1,1); glVertex2f(sx/2,sy/2);
-            glTexCoord2f(0,1); glVertex2f(-sx/2,sy/2);
-        }
-        glEnd();
-        
+        shader.enable();
+        shader.setUniformMat4f("ml_matrix", Matrix4f.translate(pos).multiply(Matrix4f.rotateZ(rot)));
+        shader.setUniform4f("inColor", new Vector4f(r, g, b, a));
+        VAO.render();
+        shader.disable();
+        text.unbind();
     }
     /**
      * Render the texture with forced size parameters
@@ -91,7 +97,18 @@ public class Sprite
      */
     public static void render(float sx,float sy)
     {
-        defText.bind();
+        /*defText.bind();
+        glColor3f(1,1,1);
+        glBegin(GL_QUADS);
+        {
+        glTexCoord2f(0,0); glVertex2f(-sx/2,-sy/2);
+        glTexCoord2f(1,0); glVertex2f(sx/2,-sy/2);
+        glTexCoord2f(1,1); glVertex2f(sx/2,sy/2);
+        glTexCoord2f(0,1); glVertex2f(-sx/2,sy/2);
+        }
+        glEnd();
+         */ 
+        /*defText.bind();
         glColor3f(1,1,1);
         
         glBegin(GL_QUADS);
@@ -102,7 +119,7 @@ public class Sprite
             glTexCoord2f(0,1); glVertex2f(-sx/2,sy/2);
         }
         glEnd();
-        
+        */
     }
     public float getsx()
     {
@@ -111,32 +128,5 @@ public class Sprite
     public float getsy()
     {
         return sy;
-    }
-    public void setsx(float sx)
-    {
-        this.sx = sx;
-    }
-    public void setsy(float sy)
-    {
-        this.sy = sy;
-    }
-    /**
-     * 
-     * @param key Specifies which texture to load.
-     * @return Returns loaded texture.
-     */
-    public static Texture loadtexture(String key)
-    {
-        try
-        {
-            return TextureLoader.getTexture("PNG", ResourceLoader.getResource("res/textures/" + key + ".png").openStream());
-        }
-        catch (IOException ex)
-        {
-            System.out.println(key);
-            Logger.getLogger(EEngine.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return null;
     }
 }

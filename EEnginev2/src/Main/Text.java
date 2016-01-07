@@ -2,13 +2,16 @@
 package Main;
 
 import Graphics.Textrenderer;
-import org.newdawn.slick.Color;
 
 public class Text extends UIobject
 {
     protected String str;
-    private final Color color;
-    public Text(int x,int y,String str,Color color,boolean displayed)
+    protected Vector4f color;
+    public Text(int x,int y,String str,boolean displayed)
+    {
+        this(x,y,str,new Vector4f(1,1,1,1),displayed);
+    }
+    public Text(int x,int y,String str,Vector4f color,boolean displayed)
     {
         this.str = str;
         this.color = color;

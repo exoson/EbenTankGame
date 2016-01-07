@@ -1,21 +1,21 @@
 
-package Graphics;
+package Main;
 
 /**
  *
  * @author emil
  */
-public class Color4f 
+public class Vector4f 
 {
     private float r, g, b, a;
 
-    public Color4f() {
+    public Vector4f() {
         this(0,0,0,0);
     }
-    public Color4f(float r, float g, float b) {
+    public Vector4f(float r, float g, float b) {
         this(r,g,b,1);
     }
-    public Color4f(float r, float g, float b, float a) {
+    public Vector4f(float r, float g, float b, float a) {
         this.r = r;
         this.g = g;
         this.b = b;

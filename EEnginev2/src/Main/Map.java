@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.lwjgl.opengl.Display;
-import static org.lwjgl.opengl.GL11.*;
 
 public class Map
 {
@@ -45,9 +43,9 @@ public class Map
     private boolean checkVisibility(int team,int x,int y)
     {
         if(getVisiblesqrs()[team][x][y]) return true;
-        for(Gameobject go : Game.game.getObjects()){
+        for(Gameobject go : Game.getObjects()){
             if(go.getTeam() != team) continue;
-            if(Util.dist(x * Game.SQUARESIZE, y * Game.SQUARESIZE, go.getX(), go.getY()) > Statobject.SRANGE) continue;
+            if(Util.dist(x * Game.SQUARESIZE, y * Game.SQUARESIZE, go.getX(), go.getY()) > 600) continue;
             if(Util.los(go,x * Game.SQUARESIZE,y * Game.SQUARESIZE)) return true;
         }
         return false;
@@ -65,15 +63,10 @@ public class Map
         {
             for(int y = 0;y < height; y++)
             {
-                if(Math.abs(x * Game.SQUARESIZE + Game.game.getShiftX()) < Display.getWidth() && Math.abs(y * Game.SQUARESIZE + Game.game.getShiftY()) < Display.getHeight()){
-                    glPushMatrix();
-                    {
-                        glTranslatef(x * Game.SQUARESIZE + Game.game.getShiftX(),y * Game.SQUARESIZE + Game.game.getShiftY(),0);
-                        float modf = Game.game.getFow() ? (getVisiblesqrs()[Game.game.getTeam()][x][y] ? 1 : 10) : 1;
-                        getSquares()[x][y].render(1 / modf,1 / modf,1 / modf);
-                    }
-                    glPopMatrix();
-                }
+                //if(Math.abs(x * Game.SQUARESIZE + Game.game.getShiftX()) < Display.getWidth() && Math.abs(y * Game.SQUARESIZE + Game.game.getShiftY()) < Display.getHeight()){
+                float modf = Game.getFow() ? (getVisiblesqrs()[Game.getTeam()][x][y] ? 1 : 10) : 1;
+                getSquares()[x][y].render(new Vector2f(x*Game.SQUARESIZE,y*Game.SQUARESIZE),1 / modf,1 / modf,1 / modf);
+                //}
             }
         }
     }

@@ -5,7 +5,6 @@ import Main.Behavior;
 import Main.Game;
 import Main.Gameobject;
 import Main.Input;
-import Main.Sound;
 import Main.Vector2f;
 
 public class CannonBehavior extends Behavior {

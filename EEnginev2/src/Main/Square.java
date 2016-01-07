@@ -33,13 +33,13 @@ public enum Square
         this.g = g;
         this.b = b;
     }
-    public void render()
+    public void render(Vector2f pos)
     {
-        spr.render();
+        spr.render(new Vector3f(pos));
     }
-    public void render(float r, float g, float b)
+    public void render(Vector2f pos, float r, float g, float b)
     {
-        spr.render(r,g,b,1);
+        spr.render(new Vector3f(pos),0,r,g,b,1);
     }
     public int gettype()
     {

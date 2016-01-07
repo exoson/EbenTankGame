@@ -1,27 +1,28 @@
 package Main;
 
 import Game.DeathMatch;
+import Graphics.Shader;
 import Graphics.Textrenderer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
+import static org.lwjgl.glfw.GLFW.*;
+import org.lwjgl.glfw.*;
+import org.lwjgl.opengl.GL;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class EEngine 
 {
+    private static long window;
+    private static int width = 800, height = 600;
     static String gamename = "2dMobo";
     public static final int GAME = 0,MENU = 1;
     private static final State[] states = new State[2];
-    public static int curstate = MENU;
+    public static int curstate = GAME;
     public static boolean running;
     public static void main(String[] args)
     {
         initDisplay();
-        initGL();
         initgame();
         gameLoop();
         cleanup();
@@ -37,7 +38,15 @@ public class EEngine
             Time.update();
             update();
             render();
+            sync();
         }
+    }
+    private static Delay frameDel = new Delay(1000/60);
+    private static void sync() {
+        while(!frameDel.over() && frameDel.active()) {
+            
+        }
+        frameDel.start();
     }
     public static void gameloopapp()
     {
@@ -47,68 +56,83 @@ public class EEngine
     private static void initgame()
     {
         Game.initGame(new DeathMatch());
+        Game.getGameMode().start();
         Textrenderer.init();
         states[GAME] = Game.game;
         states[MENU] = Game.menu;
     }
-    private static void initGL()
-    {
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0,Display.getWidth(),Display.getHeight(),0,1,-1);
-        glMatrixMode(GL_MODELVIEW);
-
-        glClearColor(0,0,0,1);
-        
-        glDisable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        
-    }
 
     public static void cleanup()
     {
-        Display.destroy();
-        Keyboard.destroy();
-        Mouse.destroy();
+        Input.cleanUp();
+        glfwDestroyWindow(getWindow());
+        glfwTerminate();
     }
 
     private static void initDisplay()
     {
-        try
-        {
-            Display.setFullscreen(false);
-            Display.setTitle(gamename);
-            Display.setDisplayMode(new DisplayMode(800,600));
-            Display.create();
-            Display.setVSyncEnabled(true);
-            Keyboard.create();
-            Mouse.create();
+        
+        if(glfwInit() != GL_TRUE) {
+            System.err.println("GLFW initialization failed!");
         }
-        catch (LWJGLException ex)
-        {
-            Logger.getLogger(EEngine.class.getName()).log(Level.SEVERE, null, ex);
+//        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+
+        window = glfwCreateWindow(width, height, gamename, NULL, NULL);
+
+        if(getWindow() == NULL) {
+            System.err.println("Could not create our Window!");
         }
+
+        // creates a bytebuffer object 'vidmode' which then queries 
+        // to see what the primary monitor is. 
+        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        
+        // Sets the initial position of our game window. 
+        glfwSetWindowPos(getWindow(), 100, 100);
+        
+        
+        Input.init();
+
+        glfwMakeContextCurrent(getWindow());
+        
+        glfwShowWindow(getWindow());
+        
+        GL.createCapabilities();
+
+        glClearColor(0,0,0,1);
+
+
+        glActiveTexture(GL_TEXTURE1);
+
+        glDisable(GL_DEPTH_TEST);
+
+        Shader.loadAll();
     }
 
     private static void update() 
     {
+        glfwPollEvents();
         states[curstate].update();
     }
 
     private static void render() 
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
         
         states[curstate].render();
         
-        Display.update();
-        Display.sync(60);
+        int i = glGetError();
+        if(i != GL_NO_ERROR)
+            System.err.println(i);
+
+        glfwSwapBuffers(getWindow());
     }
-    public static void init()
-    {
-        initGL();
-        initgame();
+
+    /**
+     * @return the window
+     */
+    public static long getWindow() {
+        return window;
     }
 }

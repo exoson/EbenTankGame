@@ -48,22 +48,15 @@ public abstract class Gameobject
                 Game.getTeam()) && Game.getFow()) {
             alpha = 0;
         }
-        
-        glPushMatrix();
-        {
-            glTranslatef(getPos().getX() + Game.getShiftX(),getPos().getY() + Game.getShiftY(),0);
-            glRotatef((float)(rotation*360/2/Math.PI), 0, 0, 1);
-            if(curanim == DEATHANIM){
-                if(deathSound != null) deathSound.playClip();
-                if(getAnims()[curanim].render(1,1,1,alpha)) {
-                    remove();
-                }
-            }else if(getAnims()[curanim].render(1,1,1,alpha)) {
-                curanim = AFKANIM;
+        if(curanim == DEATHANIM) {
+            if(deathSound != null) deathSound.playClip();
+            if(getAnims()[curanim].render(pos,rotation,1,1,1,alpha)) {
+                remove();
             }
-            
+        }else if(getAnims()[curanim].render(pos,rotation,1,1,1,alpha)) {
+            curanim = AFKANIM;
         }
-        glPopMatrix();
+
         for(Behavior b : behaviors) {
             b.render(this);
         }

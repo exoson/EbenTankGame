@@ -5,6 +5,12 @@ public class Vector3f
 {
     private float x,y,z;
     
+    public Vector3f() {
+        this(0,0,0);
+    }
+    public Vector3f(Vector2f v) {
+        this(v.getX(),v.getY(),0);
+    }
     public Vector3f(float x,float y,float z)
     {
         this.x = x;
@@ -21,7 +27,9 @@ public class Vector3f
     {
         return new Vector3f(x + vect.getX(),y + vect.getY(), z + vect.getZ());
     }
-    
+    public float dot(Vector3f vect) {
+        return vect.x*x+vect.y*y+vect.z*z;
+    }
     public Vector3f minus(Vector3f vect)
     {
         return new Vector3f(x - vect.getX(),y - vect.getY(),z - vect.getZ());
@@ -62,6 +70,10 @@ public class Vector3f
     }
     public void setZ(float var){
         z = var;
+    }
+    @Override
+    public String toString() {
+        return "" + x + " : " + y + " : " + z;
     }
 
 }

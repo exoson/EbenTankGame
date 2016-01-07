@@ -1,8 +1,9 @@
 
 package Main;
 
+import Graphics.Camera;
+import Graphics.Shader;
 import java.util.ArrayList;
-import org.lwjgl.opengl.Display;
 
 public class Game implements State
 {
@@ -18,6 +19,7 @@ public class Game implements State
     private float shiftX,shiftY;
     private int team;
     private boolean[] gameFlags;
+    private Camera camera;
     
     private GameMode gMod;
     
@@ -29,6 +31,13 @@ public class Game implements State
         game.objects = new ArrayList<>();
         game.remove = new ArrayList<>();
         game.added = new ArrayList<>();
+        Matrix4f pr_matrix = Matrix4f.orthographic(0, 800, 600, 0, -1, 1);
+        game.camera = new Camera(new Matrix4f());
+        Shader.defShader.enable();
+        Shader.defShader.setUniformMat4f("vw_matrix", Matrix4f.translate(game.camera.position));		
+        Shader.defShader.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.defShader.setUniform1i("tex", 1);
+        Shader.defShader.disable();
         game.gameFlags = new boolean[] {
             false // Fog of war
         };
@@ -70,6 +79,7 @@ public class Game implements State
     @Override
     public void render()
     {
+        camera.render();
         getLevel().render();
         for(Gameobject go : objects) {
             go.render();
@@ -223,12 +233,12 @@ public class Game implements State
         if(getShiftY() > 0) {
             setShiftY(0);
         }
-        if(getShiftX() < -Map.MAPSIZE * Game.SQUARESIZE + Display.getWidth()) {
+        /*if(getShiftX() < -Map.MAPSIZE * Game.SQUARESIZE + Display.getWidth()) {
             setShiftX(-Map.MAPSIZE * Game.SQUARESIZE + Display.getWidth());
         }
         if(getShiftY() < -Map.MAPSIZE * Game.SQUARESIZE + Display.getHeight()) {
             setShiftY(-Map.MAPSIZE * Game.SQUARESIZE + Display.getHeight());
-        }
+        }*/
     }
 
 
@@ -278,7 +288,7 @@ public class Game implements State
         game.gMod = gm;
     }
 
-    public GameMode getGameMode() {
-        return gMod;
+    public static GameMode getGameMode() {
+        return game.gMod;
     }
 }

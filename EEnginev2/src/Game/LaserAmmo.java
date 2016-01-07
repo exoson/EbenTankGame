@@ -1,10 +1,11 @@
 
 package Game;
 
+import Graphics.Renderer;
 import Main.Gameobject;
 import Main.Vector2f;
+import Main.Vector4f;
 import java.util.ArrayList;
-import static org.lwjgl.opengl.GL11.*;
 
 /**
  *
@@ -33,20 +34,6 @@ public class LaserAmmo extends AmmoBase
     }
     @Override
     public void render(Gameobject go) {
-        glPushMatrix();
-        {
-            glLineWidth(10);
-            glDisable(GL_TEXTURE_2D);
-            
-            glBegin(GL_LINE_STRIP);
-            glColor3f(0.7f, 0, 1);
-            for(Vector2f p : points) {
-                glVertex2f(p.getX(), p.getY());
-            }
-            glEnd();
-            
-            glEnable(GL_TEXTURE_2D);
-        }
-        glPopMatrix();
+        Renderer.renderLines(points, 5, new Vector4f(1f,1,1f,1));
     }
 }

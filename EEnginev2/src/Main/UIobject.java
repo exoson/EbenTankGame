@@ -2,7 +2,6 @@
 package Main;
 
 import Graphics.Sprite;
-import static org.lwjgl.opengl.GL11.*;
 
 public class UIobject
 {
@@ -26,15 +25,8 @@ public class UIobject
     }
     public void render()
     {
-        if(isDisplayed())
-        {
-            glPushMatrix();
-            {
-                glRotatef(rotation, 0, 0, 1);
-                glTranslatef(pos.getX(),pos.getY(),0);
-                spr.render();
-            }
-            glPopMatrix();
+        if(isDisplayed()) {
+            spr.render(pos);
         }
     }
     
@@ -64,14 +56,6 @@ public class UIobject
     public void setY(float y)
     {
         this.pos.setY(y);
-    }
-    public void setSX(float sx)
-    {
-        spr.setsx(sx);
-    }
-    public void setSY(float sy)
-    {
-        spr.setsy(sy);
     }
     public float getX()
     {

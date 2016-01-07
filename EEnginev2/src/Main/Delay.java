@@ -47,7 +47,6 @@ public class Delay
         started = false;
     }
     /**
-     * 
      * @return true if delay is active.
      */
     public boolean active()

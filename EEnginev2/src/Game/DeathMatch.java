@@ -10,7 +10,6 @@ import Main.Input;
 import Main.Sound;
 import java.util.ArrayList;
 import java.util.Random;
-import org.newdawn.slick.Color;
 
 /**
  *
@@ -26,15 +25,15 @@ public class DeathMatch extends GameMode
     @Override
     public void start() {
         endDelay = new Delay(2000);
-        Game.setFow(true);
+        Game.setFow(false);
         reset();
-        Game.adduiobj(new DynamicText(20, 10, "Player 1: 0", Color.yellow, true) {
+        Game.adduiobj(new DynamicText(20, 10, "Player 1: 0", true) {
             @Override
             public void update() {
                 str = "Player1: " + points1;
             }
         });
-        Game.adduiobj(new DynamicText(670, 10, "Player 2: 0", Color.yellow, true) {
+        Game.adduiobj(new DynamicText(670, 10, "Player 2: 0", true) {
             @Override
             public void update() {
                 str = "Player 2: " + points2;
@@ -90,7 +89,7 @@ public class DeathMatch extends GameMode
         Game.addObject(player1);
         Game.addObject(player2);
         Game.initObject(new PowerUpSpawner());
-        Game.getLevel().getMap().initMap("simplearena");
+        Game.getLevel().getMap().initRandomMap();
         Sound start = new Sound("start");
         start.playClip();
     }
