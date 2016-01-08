@@ -36,7 +36,7 @@ public class Client implements Runnable{
             while(running){
                 String output = scan.nextLine();
                 c.sendMsg(output);
-                if(output.equals("quit")){
+                if(output.equals("quit")) {
                     c.stop();
                     running = false;
                 }

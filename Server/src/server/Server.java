@@ -41,8 +41,7 @@ public class Server implements Runnable{
     private void stop()
     {
         running = false;
-        for(ClientServer c : cs)
-        {
+        for(ClientServer c : cs) {
             c.stop();
         }
     }
