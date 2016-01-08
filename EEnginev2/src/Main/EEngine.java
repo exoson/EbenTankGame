@@ -1,6 +1,7 @@
 package Main;
 
 import Game.DeathMatch;
+import Graphics.Camera;
 import Graphics.Shader;
 import Graphics.Textrenderer;
 import static org.lwjgl.glfw.GLFW.*;
@@ -14,7 +15,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class EEngine 
 {
     private static long window;
-    private static int width = 800, height = 600;
+    private static int width = 800+(int)Game.SQUARESIZE, height = 690;
     static String gamename = "2dMobo";
     public static final int GAME = 0,MENU = 1;
     private static final State[] states = new State[2];
@@ -106,7 +107,15 @@ public class EEngine
 
         glDisable(GL_DEPTH_TEST);
 
+        Game.setCamera(new Camera(Matrix4f.identity()));
+        Game.getCamera().setPosition(new Vector3f(-Game.SQUARESIZE/2,-70,0));
         Shader.loadAll();
+        Shader.defShader.enable();
+        Matrix4f pr_matrix = Matrix4f.orthographic(0, width, height, 0, -1, 1);
+        Shader.defShader.setUniformMat4f("vw_matrix", Matrix4f.translate(Game.getCamera().position));		
+        Shader.defShader.setUniformMat4f("pr_matrix", pr_matrix);
+        Shader.defShader.setUniform1i("tex", 1);
+        Shader.defShader.disable();
     }
 
     private static void update() 

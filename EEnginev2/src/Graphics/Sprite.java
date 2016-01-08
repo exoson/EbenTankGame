@@ -1,6 +1,8 @@
 package Graphics;
 
+import Game.DeathMatch;
 import Main.Matrix4f;
+import Main.Time;
 import Main.Vector2f;
 import Main.Vector3f;
 import Main.Vector4f;
@@ -23,8 +25,6 @@ public class Sprite
         0,2,1,
         1,2,3
     };
-    
-    private static Texture defText;
     private float sx;
     private float sy;
     private Shader shader;
@@ -42,6 +42,22 @@ public class Sprite
         Matrix4f scale = Matrix4f.scale(new Vector3f(sx,sy,1));
         text = new Texture(texture);
         shader = Shader.defShader;
+        VAO = new VertexArray(scale.apply(sqrVertices), sqrIndices, sqrTextVertices);
+        this.sx = sx;
+        this.sy = sy;
+    }
+    /**
+     * Initializes the class with the chosen texture.
+     * @param sx horizontal size
+     * @param sy vertical size
+     * @param texture loads the texture from 'res/textures/texture.png'
+     * @param shader loads the shader from 'res/shaders/shader.*'
+     */
+    public Sprite(float sx, float sy,String texture,String shader)
+    {
+        Matrix4f scale = Matrix4f.scale(new Vector3f(sx,sy,1));
+        text = new Texture(texture);
+        this.shader = new Shader(shader, shader);
         VAO = new VertexArray(scale.apply(sqrVertices), sqrIndices, sqrTextVertices);
         this.sx = sx;
         this.sy = sy;
@@ -82,44 +98,31 @@ public class Sprite
      */
     public void render(Vector3f pos,float rot, float r, float g, float b, float a)
     {
+        render(pos, rot, new Vector2f(sx, sy), r, g, b, a);
+    }
+//    public static Vector4f curColor = new Vector4f(.5f,.5f,.5f,1);
+    /**
+     * Render the texture with forced size parameters
+     * @param pos position to render the texture
+     * @param rot amount to rotate the texture
+     * @param size size for the texture
+     * @param r red value of the color
+     * @param g green value of the color
+     * @param b blue value of the color
+     * @param a alpha value of the color
+     */
+    public void render(Vector3f pos,float rot, Vector2f size, float r, float g, float b, float a)
+    {
         text.bind();
         shader.enable();
-        shader.setUniformMat4f("ml_matrix", Matrix4f.translate(pos).multiply(Matrix4f.rotateZ(rot)));
-        shader.setUniform4f("inColor", new Vector4f(r, g, b, a));
+        shader.setUniformMat4f("ml_matrix", Matrix4f.translate(pos).multiply(Matrix4f.rotateZ(rot)).multiply(Matrix4f.scale(new Vector3f(size.getX()/this.sx,size.getY()/this.sy,1))));
+        shader.setUniform4f("inColor", new Vector4f(1, 1, 1, 1));
+//        shader.setUniform1f("time", DeathMatch.time);
+//        shader.setUniform4f("seed", curColor);
+        //shader.setUniform4f("seed", seed);
         VAO.render();
         shader.disable();
         text.unbind();
-    }
-    /**
-     * Render the texture with forced size parameters
-     * @param sx Horizontal size for texture
-     * @param sy Vertical size for texture
-     */
-    public static void render(float sx,float sy)
-    {
-        /*defText.bind();
-        glColor3f(1,1,1);
-        glBegin(GL_QUADS);
-        {
-        glTexCoord2f(0,0); glVertex2f(-sx/2,-sy/2);
-        glTexCoord2f(1,0); glVertex2f(sx/2,-sy/2);
-        glTexCoord2f(1,1); glVertex2f(sx/2,sy/2);
-        glTexCoord2f(0,1); glVertex2f(-sx/2,sy/2);
-        }
-        glEnd();
-         */ 
-        /*defText.bind();
-        glColor3f(1,1,1);
-        
-        glBegin(GL_QUADS);
-        {
-            glTexCoord2f(0,0); glVertex2f(-sx/2,-sy/2);
-            glTexCoord2f(1,0); glVertex2f(sx/2,-sy/2);
-            glTexCoord2f(1,1); glVertex2f(sx/2,sy/2);
-            glTexCoord2f(0,1); glVertex2f(-sx/2,sy/2);
-        }
-        glEnd();
-        */
     }
     public float getsx()
     {

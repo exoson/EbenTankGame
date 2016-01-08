@@ -3,6 +3,7 @@ package Game;
 import Graphics.Animation;
 import Graphics.Frame;
 import Graphics.Sprite;
+import Main.Game;
 import Main.Gameobject;
 import static Main.Gameobject.AFKANIM;
 import static Main.Gameobject.DEATHANIM;
@@ -17,10 +18,12 @@ import java.util.ArrayList;
  */
 public class TNTAmmo extends AmmoBase
 {
-    private boolean exploded;
+    private static final float SPREAD = (float)Math.PI*2;
+    private static final int AMMOAMT = 10,
+            AMMOLIFETIME = 750;
+    
     public TNTAmmo() {
         super();
-        exploded = false;
         anims = new Animation[4];
         ArrayList<Frame> aFrames = new ArrayList<>();
         ArrayList<Frame> adFrames = new ArrayList<>();
@@ -37,6 +40,8 @@ public class TNTAmmo extends AmmoBase
     @Override
     public void start(Gameobject go) {
         super.start(go);
+        go.setSX(20);
+        go.setSY(20);
         go.setDeathSound(new Sound("explosion"));
     }
     
@@ -44,14 +49,14 @@ public class TNTAmmo extends AmmoBase
     protected void move(Gameobject go) {
         super.move(go);
         if(Input.getKeyPressed(((Ammo)go).shootingKey)) {
-            exploded = true;
-            go.setAnim(Gameobject.DEATHANIM);
+            go.remove();
+            for(int i = 0; i < AMMOAMT; i++) {
+                ShardAmmo b = new ShardAmmo();
+                b.setDelay(AMMOLIFETIME);
+                Game.initObject(new Ammo(go.getX(), go.getY(), go.getRotation() + ((float)i-AMMOAMT/2f)/AMMOAMT*SPREAD, b,-1, ((Ammo)go).shooter));
+            }
             ((Ammo)go).shooter.reload();
         }
-        if(exploded) {
-            go.scale(1.1f);
-        }
-        
     }
     
 }

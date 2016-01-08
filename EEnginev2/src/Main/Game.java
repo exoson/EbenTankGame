@@ -2,7 +2,6 @@
 package Main;
 
 import Graphics.Camera;
-import Graphics.Shader;
 import java.util.ArrayList;
 
 public class Game implements State
@@ -11,6 +10,7 @@ public class Game implements State
     
     public static Game game;
     public static Menu menu;
+    private static Camera camera;
     private Level curlvl;
     private ArrayList<Gameobject> objects;
     private ArrayList<Gameobject> remove;
@@ -19,7 +19,6 @@ public class Game implements State
     private float shiftX,shiftY;
     private int team;
     private boolean[] gameFlags;
-    private Camera camera;
     
     private GameMode gMod;
     
@@ -31,13 +30,6 @@ public class Game implements State
         game.objects = new ArrayList<>();
         game.remove = new ArrayList<>();
         game.added = new ArrayList<>();
-        Matrix4f pr_matrix = Matrix4f.orthographic(0, 800, 600, 0, -1, 1);
-        game.camera = new Camera(new Matrix4f());
-        Shader.defShader.enable();
-        Shader.defShader.setUniformMat4f("vw_matrix", Matrix4f.translate(game.camera.position));		
-        Shader.defShader.setUniformMat4f("pr_matrix", pr_matrix);
-        Shader.defShader.setUniform1i("tex", 1);
-        Shader.defShader.disable();
         game.gameFlags = new boolean[] {
             false // Fog of war
         };
@@ -79,11 +71,12 @@ public class Game implements State
     @Override
     public void render()
     {
-        camera.render();
+        getCamera().enable();
         getLevel().render();
         for(Gameobject go : objects) {
             go.render();
         }
+        getCamera().disable();
         ui.render();
     }
     /**
@@ -290,5 +283,19 @@ public class Game implements State
 
     public static GameMode getGameMode() {
         return game.gMod;
+    }
+
+    /**
+     * @return the camera
+     */
+    public static Camera getCamera() {
+        return camera;
+    }
+
+    /**
+     * @param camera the camera to set
+     */
+    public static void setCamera(Camera camera) {
+        Game.camera = camera;
     }
 }

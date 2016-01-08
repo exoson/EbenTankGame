@@ -13,6 +13,7 @@ public class CannonBehavior extends Behavior {
     
     private boolean isReloaded;
     private Cannon cannon;
+    private Powerup pUp;
     
     public CannonBehavior(int sKey)
     {
@@ -26,11 +27,12 @@ public class CannonBehavior extends Behavior {
     }
     @Override
     public void render(Gameobject go) {
-        
     }
     @Override
     public void update(Gameobject go) {
-        if(Input.getKeyPressed(shootingKey)){
+        if(go.getIsDead()) return;
+        
+        if(Input.getKeyPressed(shootingKey)) {
             // FIXME implement this in some nicer way
 
             if(isReloaded) {
@@ -39,6 +41,7 @@ public class CannonBehavior extends Behavior {
                 isReloaded = false;
                 if(!BasicAmmo.class.isInstance(cannon.getBehavior())) {
                     cannon = new Cannon(new BasicAmmo());
+                    pUp = null;
                 }
             }
         }
@@ -53,9 +56,10 @@ public class CannonBehavior extends Behavior {
     public int getShootingKey() {
         return shootingKey;
     }
-    public boolean setCannon(Cannon c) {
+    public boolean setCannon(Cannon c, Powerup p) {
         if(BasicAmmo.class.isInstance(cannon.getBehavior())) {
             cannon = c;
+            pUp = p;
             isReloaded = true;
             return true;
         }
@@ -63,5 +67,12 @@ public class CannonBehavior extends Behavior {
     }
     public void reload() {
         isReloaded = true;
+    }
+
+    /**
+     * @return the pUp
+     */
+    public Powerup getpUp() {
+        return pUp;
     }
 }

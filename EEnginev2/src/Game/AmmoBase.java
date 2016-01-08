@@ -34,7 +34,7 @@ public abstract class AmmoBase extends Behavior
         ammoFrames.add(new Frame(new Sprite(SX, SY,"ammo"),100));
         anims[AFKANIM] = new Animation(ammoFrames);
         
-        timeToDie = new Delay(5000);
+        timeToDie = new Delay(2500);
         timeToDie.start();
     }
     @Override

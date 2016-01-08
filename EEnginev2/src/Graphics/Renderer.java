@@ -19,6 +19,7 @@ import static org.lwjgl.opengl.GL30.*;
  */
 public class Renderer 
 {
+    private static Texture defTexture = new Texture("lol");
     public static void setColor(Vector4f c) {
         glColor4f(c.getR(), c.getG(), c.getB(),c.getA());
     }
@@ -73,9 +74,10 @@ public class Renderer
         Shader.defShader.enable();
         Shader.defShader.setUniformMat4f("ml_matrix", Matrix4f.identity());
         Shader.defShader.setUniform4f("inColor", c);
-        
+        defTexture.bind();
         glDrawArrays(GL_LINE_STRIP, 0, points.size());
 
+        defTexture.unbind();
         Shader.defShader.disable();
         
         

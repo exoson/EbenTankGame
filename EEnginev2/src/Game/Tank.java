@@ -14,15 +14,14 @@ import java.util.ArrayList;
 public class Tank extends Gameobject
 {
     
-    public Tank(float x, float y, int team)
-    {
+    public Tank(float x, float y, int team) {
         this(x,y,team,new int[]{Input.KEY_W,Input.KEY_D,Input.KEY_S,Input.KEY_A,Input.KEY_SPACE});
     }
     public Tank(float x, float y, int team, int[] keys)
     {
         Animation[] anims = new Animation[ANIMAMT];
         ArrayList<Frame> frames = new ArrayList<>();
-        frames.add(new Frame(new Sprite(Game.SQUARESIZE, 1.5f*Game.SQUARESIZE, "tank"),100));
+        frames.add(new Frame(new Sprite(Game.SQUARESIZE, 1.5f*Game.SQUARESIZE, team == 0 ? "tankred":"tankblue"),100));
         ArrayList<Frame> dFrames = new ArrayList<>();
         dFrames.add(new Frame(new Sprite(2*Game.SQUARESIZE, 2*Game.SQUARESIZE, "xplosion0"),5));
         dFrames.add(new Frame(new Sprite(2*Game.SQUARESIZE, 2*Game.SQUARESIZE, "xplosion1"),5));

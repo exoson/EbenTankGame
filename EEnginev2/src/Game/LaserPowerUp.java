@@ -23,6 +23,7 @@ public class LaserPowerUp extends Powerup
         frames.add(new Frame(new Sprite(Powerup.SIZE,Powerup.SIZE,"poweruplaser"),100));
         anims[0] = new Animation(frames);
         
+        powerB = new SniperCrosshair();
         init(x, y, "Laser Power", anims, new Cannon(new LaserAmmo(),"laser"));
     }
 }

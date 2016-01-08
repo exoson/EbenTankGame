@@ -1,7 +1,6 @@
 package Main;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Util 
 {
@@ -100,8 +99,9 @@ public class Util
         }
         f_score[(int)(g1.getX()/Game.SQUARESIZE)][(int)(g1.getY()/Game.SQUARESIZE)] = Util.dist(new Vector2f((int)(g1.getX()/Game.SQUARESIZE),(int)(g1.getY()/Game.SQUARESIZE)), goal);    // Cost from start along best known path.
         
-
+        int i = 0;
         while(!OpenSet.isEmpty()) {
+            i++;
             Vector2f current = new Vector2f();
             float minVal = Float.POSITIVE_INFINITY;
             for(Vector2f v : OpenSet) {
@@ -113,6 +113,7 @@ public class Util
             if (current.equals(goal)) {
                 return reconstruct_path(Came_From, goal);
             }
+            if(i > 1000) break;
             //System.out.println(current.toString());
             OpenSet.remove(current);
             ClosedSet.add(current);

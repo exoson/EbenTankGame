@@ -26,7 +26,7 @@ public class UIobject
     public void render()
     {
         if(isDisplayed()) {
-            spr.render(pos);
+            spr.render(new Vector3f(pos),0,new Vector2f(sx,sy),1,1,1,1);
         }
     }
     

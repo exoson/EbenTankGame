@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  *
  * @author emil
  */
-public class Cannon 
+public class Cannon
 {
     private final Behavior ammoBehavior;
     private final Sound shootingSound;

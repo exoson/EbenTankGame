@@ -3,7 +3,6 @@ package Main;
 
 import Graphics.Animation;
 import java.util.ArrayList;
-import static org.lwjgl.opengl.GL11.*;
 
 public abstract class Gameobject 
 {
@@ -26,13 +25,16 @@ public abstract class Gameobject
     private Vector2f pos;
     private Animation[] anim;
     private String name;
-    private final boolean[] flags = new boolean[2];
+    private final boolean[] flags = new boolean[3];
     public Vector2f[] collided;
     
     protected ArrayList<Behavior> behaviors ,removedBehaviors = new ArrayList<>();
     
     public void update()
     {
+        if(curanim == DEATHANIM) {
+            setIsDead(true);
+        }
         for(Behavior b : behaviors) {
             b.update(this);
         }
@@ -50,10 +52,10 @@ public abstract class Gameobject
         }
         if(curanim == DEATHANIM) {
             if(deathSound != null) deathSound.playClip();
-            if(getAnims()[curanim].render(pos,rotation,1,1,1,alpha)) {
+            if(getAnims()[curanim].render(pos,rotation, new Vector2f(sx,sy),1,1,1,alpha)) {
                 remove();
             }
-        }else if(getAnims()[curanim].render(pos,rotation,1,1,1,alpha)) {
+        }else if(getAnims()[curanim].render(pos,rotation, new Vector2f(sx,sy),1,1,1,alpha)) {
             curanim = AFKANIM;
         }
 
@@ -154,6 +156,12 @@ public abstract class Gameobject
     }
     public void setIsSolid(boolean val) {
         flags[1] = val;
+    }
+    public boolean getIsDead() {
+        return flags[2];
+    }
+    public void setIsDead(boolean val) {
+        flags[2] = val;
     }
     public int getId()
     {

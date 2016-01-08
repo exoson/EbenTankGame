@@ -22,7 +22,7 @@ public class ShotgunPowerUp extends Powerup
         ArrayList<Frame> frames = new ArrayList<>();
         frames.add(new Frame(new Sprite(Powerup.SIZE,Powerup.SIZE,"powerupshotgun"),100));
         anims[0] = new Animation(frames);
-        
+        powerB = new SpeedUp();
         init(x, y, "Shotgun Power", anims, new Cannon(new ShotgunAmmo()));
     }
 }
