@@ -11,6 +11,7 @@ in DATA
 uniform sampler2D tex;
 uniform vec4 inColor;
 uniform vec4 seed;
+
 void main()
 {
 	color = texture(tex, fs_in.tc)*inColor*seed;

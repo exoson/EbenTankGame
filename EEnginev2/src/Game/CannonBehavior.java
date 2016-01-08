@@ -56,6 +56,9 @@ public class CannonBehavior extends Behavior {
     public int getShootingKey() {
         return shootingKey;
     }
+    public void setPowerUp(Powerup p) {
+        this.pUp = p;
+    }
     public boolean setCannon(Cannon c, Powerup p) {
         if(BasicAmmo.class.isInstance(cannon.getBehavior())) {
             cannon = c;

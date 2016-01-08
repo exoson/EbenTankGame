@@ -5,7 +5,6 @@
  */
 package Game;
 
-import Main.Behavior;
 import Main.Delay;
 import Main.Gameobject;
 
@@ -13,26 +12,29 @@ import Main.Gameobject;
  *
  * @author Lime
  */
-public abstract class PowerUpBehavior extends Behavior{
+public class Armor extends PowerUpBehavior {
 
-    protected Delay del;
-    
     @Override
-    public abstract void start(Gameobject go);
-
+    public void start(Gameobject go) {
+        del = new Delay(5000);
+        del.start();
+        go.setIsInvincible(true);
+    }
     @Override
     public void update(Gameobject go) {
-        if(del.over()) {
+        super.update(go);
+        if(go.getIsHit()) {
             remove(go);
         }
     }
-
-    protected void remove(Gameobject go) {
-        go.removeBehavior(this);
-        ((CannonBehavior)go.getBehavior("CannonBehavior")).setPowerUp(null);
-    }
-    
     @Override
-    public abstract void render(Gameobject go);
+    public void remove(Gameobject go) {
+        super.remove(go);
+        go.setIsInvincible(false);
+    }
+    @Override
+    public void render(Gameobject go) {
+        
+    }
     
 }

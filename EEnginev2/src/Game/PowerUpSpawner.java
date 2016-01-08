@@ -29,6 +29,7 @@ public class PowerUpSpawner extends Gameobject
         pUps.add(new LaserPowerUp());
         pUps.add(new RocketPowerUp());
         pUps.add(new SniperPowerUp());
+        pUps.add(new ArmorPowerUp());
     }
     @Override
     public void update() 

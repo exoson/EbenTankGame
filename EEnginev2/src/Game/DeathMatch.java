@@ -70,22 +70,24 @@ public class DeathMatch extends GameMode
     public static float time = 0;
     @Override
     public boolean update() {
-//        time += 1f/100;
-//        float r = Sprite.curColor.getR()+(rng.nextFloat()-0.5f)/10;
-//        float g = Sprite.curColor.getG()+(rng.nextFloat()-0.5f)/10;
-//        float b = Sprite.curColor.getB()+(rng.nextFloat()-0.5f)/10;
-//        r = Math.max(Math.min(r, 1),0);
-//        g = Math.max(Math.min(g, 1),0);
-//        b = Math.max(Math.min(b, 1),0);
-//        Sprite.curColor = new Vector4f(r,g,b,Sprite.curColor.getA());
+        time += 1f/100;
+        float r = Sprite.curColor.getR()+(rng.nextFloat()-0.5f)/10;
+        float g = Sprite.curColor.getG()+(rng.nextFloat()-0.5f)/10;
+        float b = Sprite.curColor.getB()+(rng.nextFloat()-0.5f)/10;
+        r = Math.max(Math.min(r, 1),0);
+        g = Math.max(Math.min(g, 1),0);
+        b = Math.max(Math.min(b, 1),0);
+        Sprite.curColor = new Vector4f(r,g,b,Sprite.curColor.getA());
         if(!endDelay.active()) {
             if(player1.getIsDead()) {
                 endDelay.start();
-            }
-            if(player2.getIsDead()) {
+            } else if(player2.getIsDead()) {
                 endDelay.start();
             }
+        } else if(!player1.getIsDead() && !player2.getIsDead()) {
+            endDelay.terminate();
         }
+        
         return endDelay.over();
     }
 

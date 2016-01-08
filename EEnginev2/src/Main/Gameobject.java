@@ -25,16 +25,26 @@ public abstract class Gameobject
     private Vector2f pos;
     private Animation[] anim;
     private String name;
-    private final boolean[] flags = new boolean[3];
+    private final boolean[] flags = new boolean[5];
     public Vector2f[] collided;
     
     protected ArrayList<Behavior> behaviors ,removedBehaviors = new ArrayList<>();
     
     public void update()
     {
+        setIsHit(false);
         if(curanim == DEATHANIM) {
-            setIsDead(true);
+            setIsHit(true);
+            if(getIsInvincible()) {
+                curanim = AFKANIM;
+            }
         }
+        setIsDead((curanim == DEATHANIM));
+        
+        if(getIsDead()) {
+            if(deathSound != null) deathSound.playClip();
+        }
+        
         for(Behavior b : behaviors) {
             b.update(this);
         }
@@ -51,7 +61,6 @@ public abstract class Gameobject
             alpha = 0;
         }
         if(curanim == DEATHANIM) {
-            if(deathSound != null) deathSound.playClip();
             if(getAnims()[curanim].render(pos,rotation, new Vector2f(sx,sy),1,1,1,alpha)) {
                 remove();
             }
@@ -311,5 +320,18 @@ public abstract class Gameobject
      */
     public void setDeathSound(Sound deathSound) {
         this.deathSound = deathSound;
+    }
+
+    public boolean getIsInvincible() {
+        return flags[3];
+    }
+    public void setIsInvincible(boolean b) {
+        flags[3] = b;
+    }
+    public boolean getIsHit() {
+        return flags[4];
+    }
+    public void setIsHit(boolean val) {
+        flags[4] = val;
     }
 }

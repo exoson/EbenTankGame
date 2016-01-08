@@ -100,7 +100,7 @@ public class Sprite
     {
         render(pos, rot, new Vector2f(sx, sy), r, g, b, a);
     }
-//    public static Vector4f curColor = new Vector4f(.5f,.5f,.5f,1);
+    public static Vector4f curColor = new Vector4f(.5f,.5f,.5f,1);
     /**
      * Render the texture with forced size parameters
      * @param pos position to render the texture
@@ -119,7 +119,6 @@ public class Sprite
         shader.setUniform4f("inColor", new Vector4f(1, 1, 1, 1));
 //        shader.setUniform1f("time", DeathMatch.time);
 //        shader.setUniform4f("seed", curColor);
-        //shader.setUniform4f("seed", seed);
         VAO.render();
         shader.disable();
         text.unbind();
