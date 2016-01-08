@@ -15,7 +15,6 @@ public class Game implements State
     private ArrayList<Gameobject> objects;
     private ArrayList<Gameobject> remove;
     private ArrayList<Gameobject> added;
-    private Ui ui;
     private float shiftX,shiftY;
     private int team;
     private boolean[] gameFlags;
@@ -23,19 +22,16 @@ public class Game implements State
     private GameMode gMod;
     
     
-    public static void initGame(GameMode mode)
+    public void initGame(GameMode mode)
     {
-        menu = new Menu();
-        game = new Game();
-        game.objects = new ArrayList<>();
-        game.remove = new ArrayList<>();
-        game.added = new ArrayList<>();
-        game.gameFlags = new boolean[] {
+        objects = new ArrayList<>();
+        remove = new ArrayList<>();
+        added = new ArrayList<>();
+        gameFlags = new boolean[] {
             false // Fog of war
         };
-        game.curlvl = new Level("simplearena");
-        game.ui = new Ui();
-        game.gMod = mode;
+        curlvl = new Level("simplearena");
+        gMod = mode;
     }
     /**
      * Updates the game.
@@ -59,7 +55,6 @@ public class Game implements State
         }
         remove.removeAll(remove);
         getLevel().update();
-        ui.update();
         if(gMod.update()) {
             Sound.resetSounds();
             gMod.reset();
@@ -77,7 +72,6 @@ public class Game implements State
             go.render();
         }
         getCamera().disable();
-        ui.render();
     }
     /**
      * Inits new Gameobject into the game.
@@ -95,26 +89,11 @@ public class Game implements State
         game.objects.add(go);
     }
     /**
-     * Adds new object on the ui.
-     * @param uo the UIobject to be added.
-     */
-    public static void adduiobj(UIobject uo)
-    {
-        game.ui.addobject(uo);
-    }
-    /**
      * @return the Menu
      */
     public static Menu getmenu()
     {
         return menu;
-    }
-    /**
-     * @return the UI
-     */
-    public static Ui getui()
-    {
-        return game.ui;
     }
     /**
      * @return the Gameobjects in the game
@@ -129,21 +108,6 @@ public class Game implements State
     public static ArrayList<Gameobject> getadded()
     {
         return game.added;
-    }
-    /**
-     * @return the Current game state.
-     */
-    public static int getState()
-    {
-        return EEngine.curstate;
-    }
-    /**
-     * Sets the current game state.
-     * @param state the state to be set.
-     */
-    public static void setState(int state)
-    {
-        EEngine.curstate = state;
     }
     /**
      * Calculates which Gameobjects collide with the specified sphere.

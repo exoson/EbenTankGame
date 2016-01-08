@@ -1,6 +1,7 @@
 
-package server;
+package Main;
 
+import Main.Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

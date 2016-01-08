@@ -142,11 +142,6 @@ public class Input
     private static GLFWKeyCallback glfwKeyCallback;
     private static GLFWCursorPosCallback glfwCursorCallback;
     private static GLFWMouseButtonCallback glfwButtonCallback;
-    public static void init() {
-        glfwSetKeyCallback(EEngine.getWindow(), glfwKeyCallback = new KeyboardListener());
-        glfwSetCursorPosCallback(EEngine.getWindow(), glfwCursorCallback = new MousePosListener());
-        glfwSetMouseButtonCallback(EEngine.getWindow(), glfwButtonCallback = new MouseClickListener());
-    }
     public static void cleanUp() {
         glfwButtonCallback.release();
         glfwCursorCallback.release();
@@ -162,9 +157,6 @@ public class Input
         }
         
         if(getKey(KEY_ESCAPE)) {
-            EEngine.running = false;
-        }
-        if(glfwWindowShouldClose(EEngine.getWindow()) == GL_TRUE) {
             EEngine.running = false;
         }
         for(int i = 0; i < NUM_KEYCODES; i++){
