@@ -12,11 +12,11 @@ public class Ammo extends Gameobject
     public final int shootingKey;
     public final CannonBehavior shooter;
     
-    public Ammo(float x, float y, float sx, float sy, float rot, Behavior behavior,Animation[] anims, int shootingKey)
+    public Ammo(float x, float y, float sx, float sy, float rot, Behavior behavior, int shootingKey)
     {
         ArrayList<Behavior> b = new ArrayList<>();
         b.add(behavior);
-        init(x, y, sx, sy, rot, true, PROJECTILEID, -1, "Ammo", anims, b);
+        init(x, y, sx, sy, rot, true, PROJECTILEID, -1, "Ammo", b);
         this.shootingKey = shootingKey;
         shooter = null;
     }

@@ -4,7 +4,6 @@ package client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -20,7 +19,7 @@ public class Client implements Runnable{
     
     public Client() throws IOException
     {
-        client = new Socket("194.197.235.200",8000);
+        client = new Socket("84.251.47.135",8000);
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         out = new PrintWriter(client.getOutputStream()); 
     }

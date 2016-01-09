@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 
 public class Server implements Runnable{
     
-    private ArrayList<ClientServer> cs = new ArrayList<>();
+    private final ArrayList<ClientServer> cs = new ArrayList<>();
     private int clientamt = 0;
-    boolean running;
+    private boolean running;
     
     public static void main(String[] args) {
         Server s;
@@ -32,16 +32,19 @@ public class Server implements Runnable{
             }
         }
     }
+    public void message(String msg, int clientIdx) {
+        getCs().get(clientIdx).sendMsg(msg);
+    }
     public void broadcast(String msg)
     {
-        for(ClientServer c : cs){
+        for(ClientServer c : getCs()){
             c.sendMsg(msg);
         }
     }
-    private void stop()
+    public void stop()
     {
         running = false;
-        for(ClientServer c : cs) {
+        for(ClientServer c : getCs()) {
             c.stop();
         }
     }
@@ -60,15 +63,22 @@ public class Server implements Runnable{
                     
                 }
                 if(client != null){
-                    cs.add(new ClientServer(this, client));
+                    getCs().add(new ClientServer(this, client));
                     System.out.println("Client connected " + client.getInetAddress().toString());
                     clientamt++;
-                    new Thread(cs.get(clientamt - 1)).start();
+                    new Thread(getCs().get(clientamt - 1)).start();
                 }
             }
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+
+    /**
+     * @return the cs
+     */
+    public ArrayList<ClientServer> getCs() {
+        return cs;
     }
 }

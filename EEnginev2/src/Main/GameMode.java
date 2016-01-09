@@ -12,4 +12,6 @@ public abstract class GameMode
     public abstract boolean update();
     
     public abstract void reset();
+    
+    public abstract int getMaxPlayers();
 }

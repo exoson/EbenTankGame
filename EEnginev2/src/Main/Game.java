@@ -1,43 +1,53 @@
 
 package Main;
 
-import Graphics.Camera;
 import java.util.ArrayList;
 
-public class Game implements State
+public class Game
 {
     public static final float SQUARESIZE = 32;
     
-    public static Game game;
-    public static Menu menu;
-    private static Camera camera;
-    private Level curlvl;
-    private ArrayList<Gameobject> objects;
-    private ArrayList<Gameobject> remove;
-    private ArrayList<Gameobject> added;
+    private static Game game;
+
+    /**
+     * @return the game
+     */
+    public static Game getGame() {
+        return game;
+    }
+
+    /**
+     * @param aGame the game to set
+     */
+    public static void setGame(Game aGame) {
+        game = aGame;
+    }
+    private Map map;
+    private final ArrayList<Gameobject> objects;
+    private final ArrayList<Gameobject> remove;
+    private final ArrayList<Gameobject> added;
     private float shiftX,shiftY;
     private int team;
-    private boolean[] gameFlags;
+    private final boolean[] gameFlags;
     
     private GameMode gMod;
     
     
-    public void initGame(GameMode mode)
-    {
+    public Game(GameMode mode) {
         objects = new ArrayList<>();
         remove = new ArrayList<>();
         added = new ArrayList<>();
         gameFlags = new boolean[] {
             false // Fog of war
         };
-        curlvl = new Level("simplearena");
+        map = new Map();
         gMod = mode;
     }
     /**
      * Updates the game.
+     * @param clients the clients who are in the game
      */
-    @Override
-    public void update()
+    public void update(ArrayList<ClientServer> clients)
     {
         for(Gameobject go : objects) 
         {
@@ -54,24 +64,11 @@ public class Game implements State
             objects.remove(go);
         }
         remove.removeAll(remove);
-        getLevel().update();
+        getMap().update();
         if(gMod.update()) {
             Sound.resetSounds();
             gMod.reset();
         }
-    }
-    /**
-     * Renders the game.
-     */
-    @Override
-    public void render()
-    {
-        getCamera().enable();
-        getLevel().render();
-        for(Gameobject go : objects) {
-            go.render();
-        }
-        getCamera().disable();
     }
     /**
      * Inits new Gameobject into the game.
@@ -79,35 +76,28 @@ public class Game implements State
      */
     public static void initObject(Gameobject go)
     {
-        game.added.add(go);
+        getGame().added.add(go);
     }
     /**
      * Adds new Gameobject directly to game. Be careful whe using this one.
      * @param go the Gameobject to be added.
      */
     public static void addObject(Gameobject go) {
-        game.objects.add(go);
-    }
-    /**
-     * @return the Menu
-     */
-    public static Menu getmenu()
-    {
-        return menu;
+        getGame().objects.add(go);
     }
     /**
      * @return the Gameobjects in the game
      */
     public static ArrayList<Gameobject> getObjects()
     {
-        return game.objects;
+        return getGame().objects;
     }
     /**
      * @return the recently added Gameobjects in the game
      */
     public static ArrayList<Gameobject> getadded()
     {
-        return game.added;
+        return getGame().added;
     }
     /**
      * Calculates which Gameobjects collide with the specified sphere.
@@ -157,13 +147,13 @@ public class Game implements State
      * @return the x-shift of the screen.
      */
     public static float getShiftX() {
-        return game.shiftX;
+        return getGame().shiftX;
     }
     /**
      * @return the y-shift of the screen.
      */
     public static float getShiftY() {
-        return game.shiftY;
+        return getGame().shiftY;
     }
     /**
      * @param f the x-shift of the screen to be set.
@@ -198,20 +188,6 @@ public class Game implements State
         }*/
     }
 
-
-    /**
-     * @return the curlvl
-     */
-    public static Level getLevel() {
-        return game.curlvl;
-    }
-
-    /**
-     * @param curlvl the curlvl to set
-     */
-    public static void setLevel(Level curlvl) {
-        game.curlvl = curlvl;
-    }
     /**
      * @param val Sets fog of war
      */
@@ -222,14 +198,14 @@ public class Game implements State
      * @return true if fog of war is enabled
      */
     public static boolean getFow() {
-        return game.gameFlags[0];
+        return getGame().gameFlags[0];
     }
 
     /**
      * @return the team
      */
     public static int getTeam() {
-        return game.team;
+        return getGame().team;
     }
 
     /**
@@ -246,20 +222,20 @@ public class Game implements State
     }
 
     public static GameMode getGameMode() {
-        return game.gMod;
+        return getGame().gMod;
     }
 
     /**
-     * @return the camera
+     * @return the map
      */
-    public static Camera getCamera() {
-        return camera;
+    public static Map getMap() {
+        return getGame().map;
     }
 
     /**
-     * @param camera the camera to set
+     * @param map the map to set
      */
-    public static void setCamera(Camera camera) {
-        Game.camera = camera;
+    public static void setMap(Map map) {
+        game.map = map;
     }
 }

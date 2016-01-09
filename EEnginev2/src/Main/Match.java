@@ -12,14 +12,16 @@ import java.util.ArrayList;
  * @author Lime
  */
 public class Match {
-    private ArrayList<ClientServer> clients;
-    private Game game;
-    public Match() {
-        game = new Game();
-        
+    private final ArrayList<ClientServer> clients;
+    private final Game game;
+    
+    public Match(GameMode gm, ArrayList<ClientServer> clients) {
+        this.clients = clients;
+        game = new Game(gm);
     }
     public void update() {
-        
+        Game.setGame(game);
+        game.update(clients);
     }
     
 }

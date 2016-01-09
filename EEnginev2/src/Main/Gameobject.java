@@ -15,15 +15,12 @@ public abstract class Gameobject
     
     public static final int HEROID = 0,MINIONID = 1,PROJECTILEID = 2,POWERUPID = 3;
     
-    protected Sound deathSound;
-    
     protected int curanim = AFKANIM;
     private int id;
     private int team;
     protected float sx,sy;
     private float rotation;
     private Vector2f pos;
-    private Animation[] anim;
     private String name;
     private final boolean[] flags = new boolean[5];
     public Vector2f[] collided;
@@ -41,40 +38,13 @@ public abstract class Gameobject
         }
         setIsDead((curanim == DEATHANIM));
         
-        if(getIsDead()) {
-            if(deathSound != null) deathSound.playClip();
-        }
-        
         for(Behavior b : behaviors) {
             b.update(this);
         }
         behaviors.removeAll(removedBehaviors);
         removedBehaviors.removeAll(removedBehaviors);
     }
-    
-    public void render()
-    {
-        float alpha = 1;
-        if(!Game.getLevel().getMap().getVisibility((int)(getX()/Game.SQUARESIZE), 
-                (int)(getY()/Game.SQUARESIZE),
-                Game.getTeam()) && Game.getFow()) {
-            alpha = 0;
-        }
-        if(curanim == DEATHANIM) {
-            if(getAnims()[curanim].render(pos,rotation, new Vector2f(sx,sy),1,1,1,alpha)) {
-                remove();
-            }
-        }else if(getAnims()[curanim].render(pos,rotation, new Vector2f(sx,sy),1,1,1,alpha)) {
-            curanim = AFKANIM;
-        }
-
-        for(Behavior b : behaviors) {
-            b.render(this);
-        }
-    }
-    
-    
-    protected void init(float x, float y, float sx, float sy,float rotation, boolean isSolid,int id, int team, String name,Animation[] anims, ArrayList<Behavior> b)
+    protected void init(float x, float y, float sx, float sy,float rotation, boolean isSolid,int id, int team, String name, ArrayList<Behavior> b)
     {
         this.setId(id);
         this.setName(name);
@@ -84,21 +54,20 @@ public abstract class Gameobject
         this.setRotation(rotation);
         this.flags[1] = isSolid;
         this.setTeam(team);
-        anim = anims;
         this.behaviors = b;
         for(Behavior be : b) {
             be.start(this);
         }
     }
-    protected void init(float x, float y, float sx, float sy,float rotation, boolean isSolid,int id,String name,Animation[] anims, ArrayList<Behavior> b)
+    protected void init(float x, float y, float sx, float sy,float rotation, boolean isSolid,int id,String name, ArrayList<Behavior> b)
     {
-        init(x, y, sx, sy, rotation, isSolid, id, 0, name, anims, b);
+        init(x, y, sx, sy, rotation, isSolid, id, 0, name, b);
     }
-    protected void init(float x, float y, float sx, float sy,float rotation,int id,String name,Animation[] anims, ArrayList<Behavior> b) {
-        init(x, y, sx, sy, rotation, true, id, name, anims, b);
+    protected void init(float x, float y, float sx, float sy,float rotation,int id,String name, ArrayList<Behavior> b) {
+        init(x, y, sx, sy, rotation, true, id, name, b);
     }
-    protected void init(float x, float y, float sx, float sy,int id,String name,Animation[] anims, ArrayList<Behavior> b) {
-        init(x, y, sx, sy, 0, true, id, name, anims, b);
+    protected void init(float x, float y, float sx, float sy,int id,String name, ArrayList<Behavior> b) {
+        init(x, y, sx, sy, 0, true, id, name, b);
     }
     protected void init(ArrayList<Behavior> b) {
         this.behaviors = b;
@@ -107,7 +76,7 @@ public abstract class Gameobject
         }
     }
     public boolean checkCollisions() {
-        Square[][] sqrs = Game.getLevel().getMap().getSquares();
+        Square[][] sqrs = Game.getMap().getSquares();
         for(int x = 0; x < sqrs.length; x++) {
             for(int y = 0; y < sqrs[x].length; y++) {
                 if(sqrs[x][y].getWalkable()) continue;
@@ -280,20 +249,6 @@ public abstract class Gameobject
         sx *= mod;
         sy *= mod;
     }
-
-    /**
-     * @return the anim
-     */
-    public Animation[] getAnims() {
-        return anim;
-    }
-    /**
-     * @param anims the Animation array to be set.
-     */
-    public void setAnims(Animation[] anims) {
-        this.anim = anims;
-    }
-
     /**
      * @param id the id to set
      */
@@ -313,13 +268,6 @@ public abstract class Gameobject
      */
     public void setTeam(int team) {
         this.team = team;
-    }
-
-    /**
-     * @param deathSound the deathSound to set
-     */
-    public void setDeathSound(Sound deathSound) {
-        this.deathSound = deathSound;
     }
 
     public boolean getIsInvincible() {

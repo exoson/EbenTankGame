@@ -24,16 +24,9 @@ public abstract class AmmoBase extends Behavior
     
     
     protected float SX = 10, SY = 10;
-    protected Animation[] anims;
     protected Delay timeToDie;
     
     public AmmoBase() {
-        
-        anims = new Animation[ANIMAMT];
-        ArrayList<Frame> ammoFrames = new ArrayList<>();
-        ammoFrames.add(new Frame(new Sprite(SX, SY,"ammo"),100));
-        anims[AFKANIM] = new Animation(ammoFrames);
-        
         timeToDie = new Delay(2500);
         timeToDie.start();
     }
@@ -41,7 +34,6 @@ public abstract class AmmoBase extends Behavior
     public void start(Gameobject go) {
         go.setSX(SX);
         go.setSY(SY);
-        go.setAnims(anims);
         go.setId(Gameobject.PROJECTILEID);
         go.setName("Ammo");
         go.setIsSolid(true);

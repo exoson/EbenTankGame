@@ -16,6 +16,10 @@ public class Map
     private boolean[][][] visiblesqrs;
     private int width, height;
     
+    public Map() {
+        initRandomMap();
+    }
+    
     public Map(String mapname)
     {
         initMap(mapname);
@@ -87,7 +91,7 @@ public class Map
             for(int y = 0; y < height; y++) { 
                 for(int x = 0; x < width; x++) {
                     int temp = rng.nextFloat() > 0.9 ? 1 : 0;
-                    for(Gameobject go : Game.game.getObjects()) {
+                    for(Gameobject go : Game.getGame().getObjects()) {
                         if(Physics.rectRectCollision(go, new Vector2f[]{
                             new Vector2f((x-1f/2) * Game.SQUARESIZE,(y-1f/2) * Game.SQUARESIZE),
                             new Vector2f((x+1f/2) * Game.SQUARESIZE,(y-1f/2) * Game.SQUARESIZE),

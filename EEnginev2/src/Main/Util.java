@@ -25,7 +25,7 @@ public class Util
             for(int i = 0; Math.abs(i) < Math.abs(dy);i += Math.abs(dy) / dy){
                 x = startx;
                 y = starty + i;
-                Square sqr = Game.getLevel().getMap().getsquare(x, y);
+                Square sqr = Game.getMap().getsquare(x, y);
                 if(sqr != null) if(!sqr.getTransparent()) return false;
             }
             
@@ -33,7 +33,7 @@ public class Util
             for(int i = 0; Math.abs(i) < Math.abs(dx);i += Math.abs(dx) / dx){
                 x = startx + i;
                 y = starty;
-                Square sqr = Game.getLevel().getMap().getsquare(x, y);
+                Square sqr = Game.getMap().getsquare(x, y);
                 if(sqr != null) if(!sqr.getTransparent()) return false;
             }
         }else{
@@ -44,7 +44,7 @@ public class Util
                 {
                     x = startx + (int) i;
                     y = starty + (int)(i * k);
-                    Square sqr = Game.getLevel().getMap().getsquare(x, y);
+                    Square sqr = Game.getMap().getsquare(x, y);
                     if(sqr != null) if(!sqr.getTransparent()) return false;
                 }
             }else{
@@ -52,7 +52,7 @@ public class Util
                 {
                     x = startx + (int)(i / k);
                     y = starty + (int)(i);
-                    Square sqr = Game.getLevel().getMap().getsquare(x, y);
+                    Square sqr = Game.getMap().getsquare(x, y);
                     if(sqr != null) if(!sqr.getTransparent()) return false;
                 }
             }
@@ -70,7 +70,7 @@ public class Util
     }
     public static ArrayList<Vector2f> findPath(Gameobject g1, Gameobject g2)
     {
-        Square[][] sqrs = Game.getLevel().getMap().getSquares();
+        Square[][] sqrs = Game.getMap().getSquares();
         
         Vector2f goal = new Vector2f((int)(g2.getX()/Game.SQUARESIZE),(int)(g2.getY()/Game.SQUARESIZE));
         while(!sqrs[(int)goal.getX()][(int)goal.getY()].getTransparent()) goal = goal.add(new Vector2f(1,0));
@@ -155,7 +155,7 @@ public class Util
         return null;
     }
     private static float distanceBetween(Vector2f start, Vector2f end) {
-        if(!Game.getLevel().getMap().getsquare((int)end.getX(), (int)end.getY()).getTransparent())
+        if(!Game.getMap().getsquare((int)end.getX(), (int)end.getY()).getTransparent())
             return Float.POSITIVE_INFINITY;
         /*if(!Game.getLevel().getMap().getsquare((int)start.getX(), (int)start.getY()).getTransparent())
             return Float.POSITIVE_INFINITY;*/

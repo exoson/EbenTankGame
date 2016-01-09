@@ -1,7 +1,6 @@
 
 package Main;
 
-import Main.Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,6 +16,7 @@ public class ClientServer implements Runnable
     private final BufferedReader in;
     private final PrintWriter out;
     private boolean running;
+    private boolean inMatch;
     
     public ClientServer(Server s, Socket client) throws IOException{
         client.setSoTimeout(0);
@@ -56,5 +56,19 @@ public class ClientServer implements Runnable
         } catch (IOException ex) {
             Logger.getLogger(ClientServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    /**
+     * @return the inMatch
+     */
+    public boolean isInMatch() {
+        return inMatch;
+    }
+
+    /**
+     * @param inMatch the inMatch to set
+     */
+    public void setInMatch(boolean inMatch) {
+        this.inMatch = inMatch;
     }
 }

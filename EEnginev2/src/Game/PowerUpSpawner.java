@@ -21,7 +21,7 @@ public class PowerUpSpawner extends Gameobject
     
     public PowerUpSpawner()
     {
-        init(0, 0, 0, 0, -1, "Spawner", null, new ArrayList<Behavior>());
+        init(0, 0, 0, 0, -1, "Spawner", new ArrayList<Behavior>());
         rng = new Random();
         pUps = new ArrayList<>();
         pUps.add(new TNTPowerUp());
@@ -50,6 +50,4 @@ public class PowerUpSpawner extends Gameobject
             Game.initObject(p);
         }
     }
-    @Override
-    public void render(){}
 }

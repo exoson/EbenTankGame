@@ -46,8 +46,8 @@ public class Powerup extends Gameobject
         }
     }
     
-    protected void init(float x, float y, String name, Animation[] anims, Cannon cannon) {
-        init(x, y, SIZE, SIZE, 0, false, POWERUPID, 3, name, anims, new ArrayList<Behavior>());
+    protected void init(float x, float y, String name, Cannon cannon) {
+        init(x, y, SIZE, SIZE, 0, false, POWERUPID, 3, name, new ArrayList<Behavior>());
         this.powerUp = cannon;
     }
 }
