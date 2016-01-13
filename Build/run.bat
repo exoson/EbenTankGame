@@ -1,1 +1,1 @@
-java -Djava.library.path="C:\Users\emil\Documents\NetBeansProjects\Test\res\windows" -jar "TankGame.jar"
+java -Djava.library.path="C:\Users\emil\Documents\EbenTankGame\Build\res\native" -jar "TankGame.jar"
