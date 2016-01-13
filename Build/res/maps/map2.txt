@@ -1,0 +1,17 @@
+dddddddddd
+ddssssddsd
+ddsaasdasd
+ddsddssssd
+ddsaddaddd
+ddsddadddd
+ddssssssdd
+ddddaadsdd
+dsssssssdd
+dddadddddd
+start 8, 1, 3 
+end 1, 8
+raha 15
+00000000
+00000000
+0000000
+0000

@@ -1,0 +1,14 @@
+aaaaaaaaaa
+aasasssaaa
+aasasasaaa
+aasssasaaa
+aaaaaasaaa
+assssssdda
+asaaaddsda
+asaaaadsda
+asssssssaa
+aaaaaaaaaa
+start 2, 1, 3 
+end 7, 6
+000
+000
